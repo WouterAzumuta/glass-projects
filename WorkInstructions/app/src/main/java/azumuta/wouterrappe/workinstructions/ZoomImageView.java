@@ -1,14 +1,17 @@
-package azumuta.wouterrappe.sensors;
+package azumuta.wouterrappe.workinstructions;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-public class ZoomImageView extends ImageView {
+public class ZoomImageView extends View {
     private Drawable drawable;
 
     private int top, bottom, right, left;
@@ -42,14 +45,17 @@ public class ZoomImageView extends ImageView {
         this.canvas_width = metrics.widthPixels;
         this.canvas_height = metrics.heightPixels;
 
-        if(image_width > image_height) {                                            // landscape images     scaled to a width of MAX_WIDTH
+        double zoomX = (double) canvas_width / image_width;
+        double zoomY = (double) canvas_height / image_height;
+
+        if(zoomY > zoomX) {                                            // scaled to a width of MAX_WIDTH
             double zoomFactor = (double) canvas_width / image_width;
             double targetHeight = image_height * zoomFactor;
             this.top = (int) ((canvas_height / 2) - (targetHeight / 2));
             this.bottom = (int) ((canvas_height / 2) + (targetHeight / 2));
             this.left = 0;
             this.right = canvas_width;
-        } else {                                                        // portrait images      scaled to a height of MAX_HEIGHT
+        } else {                                                                    // scaled to a height of MAX_HEIGHT
             double zoomFactor = (double) canvas_height / image_height;
             double targetWidth = image_width * zoomFactor;
             this.left = (int) ((canvas_width / 2) - (targetWidth / 2));
@@ -74,7 +80,7 @@ public class ZoomImageView extends ImageView {
         super.onDraw(canvas);
 
         Log.d("zoomview", String.format("drawing top: %d, bottom: %d, left: %d, right: %d", this.top, this.bottom, this.left, this.right));
-        Log.d("pan", String.format("scale: %f, panX: %d", this.scale, this.panX));
+        Log.d("zoomview", String.format("scale: %f, panX: %d", this.scale, this.panX));
 
 
         drawable.setBounds(this.left + this.panX, this.top + this.panY, this.right + this.panX, this.bottom + this.panY);
@@ -85,7 +91,7 @@ public class ZoomImageView extends ImageView {
     }
 
     public void handleScroll(float displacement, float delta, float velocity) {
-        //Log.d("zoomview", String.format("Scroll: %f %f %f", displacement, delta, velocity));
+        Log.d("zoomview", String.format("SCROLL: %f %f %f", displacement, delta, velocity));
 
         if(Math.abs(delta) > this.scrollDeltaTreshold) {
             if (velocity > 0) {
@@ -99,7 +105,7 @@ public class ZoomImageView extends ImageView {
     }
 
     public void handleRotation(float deltaAngleX, float deltaAngleY) {
-        Log.d("pan", "DELTA_ANGLE: " + deltaAngleY);
+        Log.d("zoomview", "DELTA_ANGLE: " + deltaAngleY);
 
         boolean invalidateFlag = false;
         if(isZoomedIn() && (this.right - this.left) * this.scale > this.canvas_width) {

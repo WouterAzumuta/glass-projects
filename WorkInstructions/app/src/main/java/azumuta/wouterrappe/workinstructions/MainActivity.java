@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -20,7 +19,8 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
-    public static final String IMAGE_IDS = "ImageIds";
+    public static final String IMAGE_IDS = "IMAGE_IDS";
+    public static final String IMAGE_ID = "IMAGE_ID";
 
     private List<CardBuilder> firstLevelCards;
     private CardScrollView mCardScrollView;
@@ -79,10 +79,18 @@ public class MainActivity extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                 am.playSoundEffect(Sounds.TAP);
-                // TODO launch nested scrollView for the workinstruction
-                Intent intent = new Intent(context, WorkInstructionActivity.class);
-                intent.putExtra(IMAGE_IDS, instructions.get(position).getImages());
-                startActivity(intent);
+
+                int imageCount = instructions.get(position).getImages().size();
+                if(imageCount > 1) {
+                    Intent intent = new Intent(context, WorkInstructionImagesActivity.class);
+                    intent.putExtra(IMAGE_IDS, instructions.get(position).getImages());
+                    startActivity(intent);
+                }
+                else if(imageCount == 1) {
+                    Intent intent = new Intent(context, SingleImageActivity.class);
+                    intent.putExtra(IMAGE_ID, instructions.get(position).getImages().get(0));
+                    startActivity(intent);
+                }
             }
         });
     }

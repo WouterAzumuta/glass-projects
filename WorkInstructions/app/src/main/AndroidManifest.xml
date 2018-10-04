@@ -25,8 +25,8 @@
                 android:resource="@xml/voice_trigger" />
         </activity>
 
-        <activity android:name=".WorkInstructionActivity">
+        <activity android:name=".WorkInstructionImagesActivity"></activity>
+        <activity android:name=".SingleImageActivity"></activity>
 
-        </activity>
     </application>
 </manifest>

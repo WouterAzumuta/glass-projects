@@ -3,23 +3,32 @@ package azumuta.wouterrappe.workinstructions;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.google.android.glass.media.Sounds;
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
 
 import java.util.ArrayList;
 
-public class WorkInstructionActivity extends Activity {
+public class WorkInstructionImagesActivity extends Activity {
 
     private ArrayList<Integer> mImageIds;
     private ArrayList<View> mCards;
@@ -33,6 +42,8 @@ public class WorkInstructionActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         createCards();
+
+        final Context context = this;
 
         mCardScrollView = new CardScrollView(this);
         mCardScrollAdapter = new CardScrollAdapter() {
@@ -60,6 +71,18 @@ public class WorkInstructionActivity extends Activity {
         mCardScrollView.setAdapter(mCardScrollAdapter);
         mCardScrollView.activate();
 
+        mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                am.playSoundEffect(Sounds.TAP);
+
+                Intent intent = new Intent(context, SingleImageActivity.class);
+                intent.putExtra(MainActivity.IMAGE_ID, mImageIds.get(position));
+                startActivity(intent);
+            }
+        });
+
         setContentView(mCardScrollView);
     }
 
@@ -71,6 +94,7 @@ public class WorkInstructionActivity extends Activity {
 
         for(Integer id : mImageIds) {
             mCards.add(getSingleImageView(id));
+            //mCards.add(getZoomableImageView(id));
         }
     }
 
@@ -84,6 +108,7 @@ public class WorkInstructionActivity extends Activity {
         return view;
     }
 
+    /*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
@@ -92,5 +117,6 @@ public class WorkInstructionActivity extends Activity {
             finish();
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
+
 }
