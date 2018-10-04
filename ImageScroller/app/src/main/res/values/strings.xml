@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ImageScroller</string>
+    <string name="title_activity_main">Image Scroller</string>
+    <string name="hello_world">Hello world!</string>
+</resources>

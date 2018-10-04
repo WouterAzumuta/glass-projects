@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Basketball Live Card</string>
+    <string name="title_activity_live_card_service">Basketball</string>
+    <string name="action_stop">Stop</string>
+    <string name="home_team">Home Team</string>
+    <string name="away_team">Away Team</string>
+    <string name="game_quarter">First quarter</string>
+</resources>

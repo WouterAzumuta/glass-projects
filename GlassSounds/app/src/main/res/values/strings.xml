@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Sounds of the Glass</string>
+    <string name="title_activity_main">GlassSounds</string>
+    <string name="play_sounds">Tap to hear the sounds of the glass!</string>
+</resources>

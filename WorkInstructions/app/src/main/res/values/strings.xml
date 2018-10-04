@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WorkInstructions</string>
+    <string name="title_activity_main">Work Instructions</string>
+    <string name="glass_voice_trigger">show work instructions</string>
+</resources>
